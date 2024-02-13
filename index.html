@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Valentine's Day 2024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<script src="./js/SeamlessLoop.js"></script>
+<style type="text/css">
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .fade-in {
+        opacity: 1;
+        animation: fadeIn 0.5s;
+    }
+
+    .fade-out {
+        animation: fadeOut 0.5s;
+        opacity: 0;
+    }
+
+    body {
+        font-family: sans-serif;
+        color: white;
+        padding-left: 5vw;
+        padding-right: 5vw;
+    }
+
+    #background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(83, 33, 41);
+    }
+
+    #text {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        font-weight: bold;
+        font-size: 5vw;
+        text-align: center;
+    }
+
+    #play-button {
+        font-size: 5vw;
+        position: fixed;
+        bottom: 5vh;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: transparent;
+        border: 3px solid white;
+        border-radius: 1vh;
+        padding: 3vw 5vw;
+        color: white;
+    }
+
+    @media screen and (min-width: 800px) {
+        #text {
+            font-size: 2vw;
+        }
+
+        #play-button {
+            font-size: 2vw;
+            padding: 1vw 1.4vw;
+        }
+    }
+
+    @media screen and (max-width: 799px) {
+        #text {
+            font-size: 5vw;
+        }
+
+        #play-button {
+            font-size: 5vw;
+            padding: 3vw 5vw;
+        }
+    }
+
+    #play-button:active {
+        background-color: white;
+        color: rgb(83, 33, 41);
+    }
+
+    #play-button.disabled {
+        color: grey;
+        border: 1px solid grey;
+    }
+</style>
+<script type="text/javascript">
+    let ready = false;
+    var loop = new SeamlessLoop();
+    loop.addUri('./music/instrumentals/loop0.wav', 10667, "intro");
+    loop.addUri('./music/instrumentals/part1.wav', 21333, "part1");
+    loop.addUri('./music/instrumentals/loop1a.wav', 667, "loop1a");
+    loop.addUri('./music/vocals/01 - another sunday afternoon.wav', 10000, "vocal1");
+    loop.addUri('./music/instrumentals/loop1.wav', 10667, "loop1");
+    loop.addUri('./music/vocals/02 - chorus combined.wav', 42667, "chorus");
+    loop.addUri('./music/instrumentals/loop3.wav', 10667, "loop2");
+    loop.addUri('./music/vocals/03 - end combined.wav', 99999, "end");
+
+    let beat = 0;
+    let part1Flag = false;
+    let part1Done = false;
+    let part2Flag = false;
+    let part2Done = false;
+    let part3Flag = false;
+
+    let text0Flag = true;
+    let text1Flag = false;
+    let text2Flag = false;
+
+    const pleaseWait = () => {
+        const playButton = document.getElementById('play-button');
+        const textDiv = document.getElementById('text');
+
+        playButton.onclick = null;
+        playButton.classList.add('disabled');
+        playButton.value = 'Please wait...';
+    };
+
+    const playPart1 = () => {
+        part1Flag = true;
+        pleaseWait();
+    };
+    const playPart2 = () => {
+        part2Flag = true;
+        pleaseWait();
+    };
+    const playPart3 = () => {
+        part3Flag = true;
+        pleaseWait();
+    };
+
+    const play = () => {
+        const playButton = document.getElementById('play-button');
+        const textDiv = document.getElementById('text');
+        playButton.onclick = undefined;
+        playButton.classList.add('fade-out');
+        textDiv.classList.add('fade-out');
+
+        // explainer text
+        setTimeout(() => {
+            textDiv.classList.remove('fade-out');
+            textDiv.innerHTML = '<div class="fade-in">Hey Clarissa, I made this<br>e-card just for you.</div><br><div>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;</div><br><div>&nbsp;</div>';
+
+            setTimeout(() => {
+                textDiv.innerHTML = '<div>Hey Clarissa, I made this<br>e-card just for you.</div><br><div class="fade-in">I don\'t know how to write music,<br>but I figured this is the next best<br>thing: something that is still musical,<br>but also something handmade.</div><br><div>&nbsp;</div>';
+
+                setTimeout(() => {
+                    textDiv.innerHTML = '<div>Hey Clarissa, I made this<br>e-card just for you.</div><br><div>I don\'t know how to write music,<br>but I figured this is the next best<br>thing: something that is still musical,<br>but also something handmade.</div><br><div class="fade-in">I hope you enjoy it!</div>';
+                    playButton.onclick = playPart1;
+                    playButton.classList.add('fade-in');
+                    playButton.classList.remove('fade-out');
+                    playButton.value = 'Continue';
+                }, 2667);
+            }, 2667);
+        }, 2667);
+
+        setInterval(() => {
+            beat++;
+            console.log({ beat });
+
+            if (part1Flag && (beat + 1) % 16 === 0) {
+                text0Flag = false;
+                part1Flag = false;
+
+                textDiv.classList.add('fade-out');
+                playButton.classList.add('fade-out');
+
+                // message part 1
+                setTimeout(() => {
+                    textDiv.innerHTML = "Over the many years of our relationship, we've shared a lot of love with each other.";
+                    textDiv.classList.add('fade-in');
+                    textDiv.classList.remove('fade-out');
+
+                    setTimeout(() => {
+                        textDiv.classList.remove('fade-in');
+                        textDiv.classList.add('fade-out');
+
+                        setTimeout(() => {
+                            textDiv.innerHTML = "We've gone out and explored the world together, tried all kinds of different foods, and went to try new experiences every once in a while.";
+                            textDiv.classList.add('fade-in');
+                            textDiv.classList.remove('fade-out');
+
+                            setTimeout(() => {
+                                textDiv.classList.remove('fade-in');
+                                textDiv.classList.add('fade-out');
+
+                                setTimeout(() => {
+                                    textDiv.innerHTML = "In the day-to-day, we've also done a lot together, whether it's playing video games or watching a movie while eating takeout from a nearby restaurant.";
+                                    textDiv.classList.add('fade-in');
+                                    textDiv.classList.remove('fade-out');
+
+                                    setTimeout(() => {
+                                        textDiv.classList.remove('fade-in');
+                                        textDiv.classList.add('fade-out');
+
+                                        setTimeout(() => {
+                                            textDiv.innerHTML = "And I cherish all the time we've spent together, even if all we're doing is lying in bed together.";
+                                            textDiv.classList.add('fade-in');
+                                            textDiv.classList.remove('fade-out');
+
+                                            setTimeout(() => {
+                                                textDiv.classList.remove('fade-in');
+                                                textDiv.classList.add('fade-out');
+
+                                                setTimeout(() => {
+                                                    textDiv.innerHTML = "Another Sunday afternoon<br>And I'm still in bed with you<br>Nothing else I wanna do";
+                                                    textDiv.classList.add('fade-in');
+                                                    textDiv.classList.remove('fade-out');
+
+                                                    setTimeout(() => {
+                                                        textDiv.classList.remove('fade-in');
+                                                        textDiv.classList.add('fade-out');
+
+                                                        setTimeout(() => {
+                                                            textDiv.innerHTML = "Order from that place you like<br>We don't need to go outside<br>Something 'bout you feels so right";
+                                                            textDiv.classList.add('fade-in');
+                                                            textDiv.classList.remove('fade-out');
+
+                                                            setTimeout(() => {
+                                                                textDiv.classList.remove('fade-in');
+                                                                textDiv.classList.add('fade-out');
+
+                                                                setTimeout(() => {
+                                                                    textDiv.innerHTML = "I also love you because of how much you do for our family. Each and every day, I see you take care of me, Caralise, and Darby with a lot of love. You're also very kind, being able to help me with all the things I ask you for help with.<br>";
+                                                                    textDiv.classList.add('fade-in');
+                                                                    textDiv.classList.remove('fade-out');
+                                                                    playButton.onclick = playPart2;
+                                                                    playButton.value = 'Continue';
+                                                                    playButton.classList.add('fade-in');
+                                                                    playButton.classList.remove('disabled');
+                                                                    playButton.classList.remove('fade-out');
+                                                                }, 1333)
+                                                            }, 9333)
+                                                        }, 2000)
+                                                    }, 8000)
+                                                }, 2000)
+                                            }, 4000)
+                                        }, 1333)
+                                    }, 4000)
+                                }, 1333)
+                            }, 4000)
+                        }, 1333)
+                    }, 4000)
+                }, 667);
+
+                console.log('updated to part1');
+                loop.update('part1', true);
+                setTimeout(() => {
+
+                    console.log('updated to loop1a');
+                    loop.update('loop1a', true);
+                    setTimeout(() => {
+                        console.log('updated to vocal1');
+                        loop.update('vocal1', true);
+                        setTimeout(() => {
+                            console.log('updated to loop1');
+                            loop.update('loop1', true);
+                            part1Done = true;
+                            text1Flag = true;
+                        }, 10000);
+                    }, 667);
+                }, 21667);
+            } else if (part2Flag && part1Done && (beat + 1) % 16 === 0) {
+                part2Flag = false;
+
+                textDiv.classList.remove('fade-in');
+                textDiv.classList.add('fade-out');
+                playButton.classList.remove('fade-in');
+                playButton.classList.add('fade-out');
+
+                setTimeout(() => {
+                    textDiv.innerHTML = "It makes me think about how lucky I am to have you. Because these days, it's even hard to find someone so loyal and loving as you.";
+                    textDiv.classList.remove('fade-out');
+                    textDiv.classList.add('fade-in');
+
+                    setTimeout(() => {
+                        textDiv.classList.remove('fade-in');
+                        textDiv.classList.add('fade-out');
+
+                        setTimeout(() => {
+                            textDiv.innerHTML = "It's you<br>Loving's so easy to do<br>Yeah, it's easy, baby";
+                            textDiv.classList.remove('fade-out');
+                            textDiv.classList.add('fade-in');
+
+                            setTimeout(() => {
+                                textDiv.classList.remove('fade-in');
+                                textDiv.classList.add('fade-out');
+
+                                setTimeout(() => {
+                                    textDiv.innerHTML = "Oh, ooh-ooh<br>Think that I'm falling for you<br>Yeah, it's easy";
+                                    textDiv.classList.remove('fade-out');
+                                    textDiv.classList.add('fade-in');
+
+                                    setTimeout(() => {
+                                        textDiv.classList.remove('fade-in');
+                                        textDiv.classList.add('fade-out');
+
+                                        setTimeout(() => {
+                                            textDiv.innerHTML = "We've worked so hard to make the marriage what it is today, we've gone through many trials and rised above many obstacles.";
+                                            textDiv.classList.remove('fade-out');
+                                            textDiv.classList.add('fade-in');
+
+                                            setTimeout(() => {
+                                                textDiv.classList.remove('fade-in');
+                                                textDiv.classList.add('fade-out');
+
+                                                setTimeout(() => {
+                                                    textDiv.innerHTML = "Even after the loudest fights and the most heated arguments, I've always had faith that we'd always be together, and I'm really happy that we're still here.";
+                                                    textDiv.classList.remove('fade-out');
+                                                    textDiv.classList.add('fade-in');
+
+                                                    setTimeout(() => {
+                                                        textDiv.classList.remove('fade-in');
+                                                        textDiv.classList.add('fade-out');
+
+                                                        setTimeout(() => {
+                                                            textDiv.innerHTML = "We have a really good thing going here, and I really hope that we can keep it like this forever.";
+                                                            textDiv.classList.remove('fade-out');
+                                                            textDiv.classList.add('fade-in');
+                                                            playButton.onclick = playPart3;
+                                                            playButton.value = 'Continue';
+                                                            playButton.classList.add('fade-in');
+                                                            playButton.classList.remove('disabled');
+                                                            playButton.classList.remove('fade-out');
+                                                        }, 1333)
+                                                    }, 4000);
+                                                }, 1333)
+                                            }, 4000);
+                                        }, 667)
+                                    }, 11333);
+                                }, 667)
+                            }, 10000);
+                        }, 2000)
+                    }, 7333);
+                }, 667);
+
+                console.log('playing chorus');
+                loop.update('chorus', true);
+                setTimeout(() => {
+                    loop.update('loop2', true);
+                    part2Done = true;
+                }, 42000);
+            } else if (part3Flag && part2Done && (beat + 1) % 16 === 0) {
+                part3Flag = false;
+                
+                textDiv.classList.remove('fade-in');
+                textDiv.classList.add('fade-out');
+                playButton.classList.remove('fade-in');
+                playButton.classList.add('fade-out');
+
+                setTimeout(() => {
+                    textDiv.innerHTML = "Like this forever<br>White dress or whatever<br>I keep dreamin' there's a somewhere<br>That we grow old together";
+                    textDiv.classList.remove('fade-out');
+                    textDiv.classList.add('fade-in');
+
+                    setTimeout(() => {
+                        textDiv.classList.remove('fade-in');
+                        textDiv.classList.add('fade-out');
+
+                        setTimeout(() => {
+                            textDiv.innerHTML = "In a van or in a mansion<br>Raining but we're dancing<br>There's a billion people out there<br>I can't believe the chances";
+                            textDiv.classList.remove('fade-out');
+                            textDiv.classList.add('fade-in');
+
+                            setTimeout(() => {
+                                textDiv.classList.remove('fade-in');
+                                textDiv.classList.add('fade-out');
+                                
+                                setTimeout(() => {
+                                    textDiv.innerHTML = "It's you<br>Loving's so easy to do<br>Yeah, it's easy, baby";
+                                    textDiv.classList.remove('fade-out');
+                                    textDiv.classList.add('fade-in');
+
+                                    setTimeout(() => {
+                                        textDiv.classList.remove('fade-in');
+                                        textDiv.classList.add('fade-out');
+
+                                        setTimeout(() => {
+                                            textDiv.innerHTML = "Oh, ooh-ooh<br>Think that I'm falling for you<br>Yeah, it's easy";
+                                            textDiv.classList.remove('fade-out');
+                                            textDiv.classList.add('fade-in');
+
+                                            setTimeout(() => {
+                                                textDiv.classList.remove('fade-in');
+                                                textDiv.classList.add('fade-out');
+
+                                                setTimeout(() => {
+                                                    textDiv.innerHTML = "Happy Valentines Day<br>Clarissa!<br><br>Song:<br>MAX, keshi - IT'S YOU (feat. keshi)";
+                                                    textDiv.classList.remove('fade-out');
+                                                    textDiv.classList.add('fade-in');
+                                                    playButton.onclick = () => window.location.reload();
+                                                    playButton.value = 'Restart';
+                                                    playButton.classList.add('fade-in');
+                                                    playButton.classList.remove('disabled');
+                                                    playButton.classList.remove('fade-out');
+                                                }, 667)
+                                            }, 11333);
+                                        }, 667)
+                                    }, 10000);
+                                }, 667)
+                            }, 10000)
+                        }, 667);
+                    }, 9333)
+                }, 667);
+
+                console.log('playing end');
+                loop.update('end', true);
+                setTimeout(() => {
+                    loop.stop();
+                }, 89999);
+            }
+        }, 667);
+
+        loop.start('intro');
+    }
+
+    loop.callback(() => {
+        ready = true;
+    });
+</script>
+
+<body>
+    <div id="background">
+        <div id="text">
+            <div>Welcome to your musical e-card!</div><br>
+            <div>Music will play as you read through the card, so make sure your volume is on.</div><br>
+            <div>Press play below to begin!</div>
+        </div>
+        <input type="button" id="play-button" value="Play" onclick="play()">
+    </div>
+</body>
+
+</html>
